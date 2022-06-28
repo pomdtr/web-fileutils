@@ -5,7 +5,7 @@
 	"repository": "https://github.com/pomdtr/web-fileutils",
 	"icon": "assets/icon.png",
 	"description": "File Utils clone with support for the browser.",
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"engines": {
 		"vscode": "^1.68.0"
 	},
@@ -14,9 +14,7 @@
 	],
 	"activationEvents": [
 		"onCommand:fileutils.newFile",
-		"onCommand:fileutils.newFileAtRoot",
 		"onCommand:fileutils.newFolder",
-		"onCommand:fileutils.newFolderAtRoot",
 		"onCommand:fileutils.remove",
 		"onCommand:fileutils.copy",
 		"onCommand:fileutils.move",
@@ -42,24 +40,12 @@
 		"commands": [
 			{
 				"command": "fileutils.newFile",
-				"title": "New File Relative to Current View",
-				"category": "File Utils"
-			},
-			{
-				"command": "fileutils.newFileAtRoot",
-				"title": "New File Relative to Project Root",
-				"enablement": "workspaceFolderCount > 0",
+				"title": "New File",
 				"category": "File Utils"
 			},
 			{
 				"command": "fileutils.newFolder",
-				"title": "New Folder Relative to Current View",
-				"category": "File Utils"
-			},
-			{
-				"command": "fileutils.newFolderAtRoot",
-				"title": "New Folder Relative to Project Root",
-				"enablement": "workspaceFolderCount > 0",
+				"title": "New Folder Relative",
 				"category": "File Utils"
 			},
 			{

@@ -16,30 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand("vscode.open", targetUri);
       }
     }),
-    vscode.commands.registerCommand(
-      "fileutils.newFileAtRoot",
-      async () => {
-		if (!vscode.workspace.workspaceFolders) {
-			await vscode.window.showErrorMessage("No workspace folder is open.");
-			return;
-		}
-        const targetUri = await newFile(vscode.workspace.workspaceFolders[0].uri);
-        if (targetUri) {
-          vscode.commands.executeCommand("vscode.open", targetUri);
-        }
-      }
-    ),
     vscode.commands.registerCommand("fileutils.newFolder", newFolder),
-    vscode.commands.registerCommand(
-      "fileutils.newFolderAtRoot",
-      async () => {
-		if (!vscode.workspace.workspaceFolders) {
-			await vscode.window.showErrorMessage("No workspace folder is open.");
-			return;
-		}
-		await newFolder(vscode.workspace.workspaceFolders[0].uri);
-	  }
-    ),
     vscode.commands.registerCommand("fileutils.duplicate", async () => {
       const sourceUri = vscode.window.activeTextEditor?.document.uri;
       if (!sourceUri) {
