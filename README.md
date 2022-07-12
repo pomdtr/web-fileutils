@@ -1,12 +1,12 @@
 # File Utils
 
-An clone of the [File Utils Extension](https://marketplace.visualstudio.com/items?itemName=sleistner.vscode-fileutils) with browser support.
+A clone of the [File Utils Extension](https://marketplace.visualstudio.com/items?itemName=sleistner.vscode-fileutils) with support for remote workspaces.
 
-Do not install both extensions, because one will be overwritten by the other.
+Do not install both extensions, because one will overwrite the other.
 
 ## Notice
 
-This extension works best with the simple dialog is used for file operations. To enable it, add the following to your settings.json:
+This extension works best when the simple dialog is used for file operations. To enable it, add the following to your settings.json:
 
 ```json
 "files.simpleDialog.enable": true
