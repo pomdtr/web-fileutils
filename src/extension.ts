@@ -1,7 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import { newFile, newFolder, copyFile, moveFile } from "./fileutils";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -11,46 +10,68 @@ export function activate(context: vscode.ExtensionContext) {
   // The commandId parameter must match the command field in package.json
   let disposables = [
     vscode.commands.registerCommand("fileutils.newFile", async () => {
-      const targetUri = await newFile();
-      if (targetUri) {
-        vscode.commands.executeCommand("vscode.open", targetUri);
+      const uri = await vscode.window.showSaveDialog();
+      if (!uri) {
+        return;
       }
+      await vscode.workspace.fs.writeFile(uri, new Uint8Array());
+      vscode.commands.executeCommand("vscode.open", uri);
     }),
-    vscode.commands.registerCommand("fileutils.newFolder", newFolder),
+    vscode.commands.registerCommand("fileutils.newFolder", async () => {
+      const uri = await vscode.window.showSaveDialog({
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        filters: { Folders: [] },
+      });
+      if (!uri) {
+        return;
+      }
+      await vscode.workspace.fs.createDirectory(
+        uri.with({ path: uri.path.replace(/\.undefined$/, "") })
+      );
+      return uri;
+    }),
     vscode.commands.registerCommand("fileutils.duplicate", async () => {
       const sourceUri = vscode.window.activeTextEditor?.document.uri;
       if (!sourceUri) {
         return;
       }
-      const targetUri = await copyFile(sourceUri);
-      if (targetUri) {
-        await vscode.commands.executeCommand("vscode.open", targetUri);
+
+      const targetUri = await vscode.window.showSaveDialog({
+        defaultUri: sourceUri,
+      });
+      if (!targetUri) {
+        return;
       }
+
+      await vscode.workspace.fs.copy(sourceUri, targetUri);
+      await vscode.commands.executeCommand("vscode.open", targetUri);
     }),
     vscode.commands.registerCommand("fileutils.move", async () => {
       const sourceUri = vscode.window.activeTextEditor?.document.uri;
       if (!sourceUri) {
         return;
       }
-      await vscode.commands.executeCommand(
-        "workbench.action.closeActiveEditor"
-      );
-      const targetUri = await moveFile(sourceUri);
-      if (targetUri) {
-        await vscode.commands.executeCommand("vscode.open", targetUri);
+      const targetUri = await vscode.window.showSaveDialog({
+        defaultUri: sourceUri,
+      });
+      if (!targetUri) {
+        return;
       }
+
+      await vscode.workspace.fs.rename(sourceUri, targetUri);
+      await vscode.commands.executeCommand("vscode.open", targetUri);
     }),
+
     vscode.commands.registerCommand("fileutils.remove", async () => {
       if (!vscode.window.activeTextEditor) {
         return;
       }
-	  const documentUri = vscode.window.activeTextEditor.document.uri;
+      const documentUri = vscode.window.activeTextEditor.document.uri;
+
       await vscode.commands.executeCommand(
         "workbench.action.closeActiveEditor"
       );
-      await vscode.workspace.fs.delete(
-		documentUri
-      );
+      await vscode.workspace.fs.delete(documentUri);
     }),
   ];
 
